@@ -1,0 +1,12 @@
+app:
+  host: localhost
+  port: 6006
+workers:
+    max_workers: 1
+    model_path: '/home/laneesra/PycharmProjects/speech_db/speech_app/imagetagger/imagetagger/static/weights.h5'
+db:
+  database: speech_db
+  user: speech_app_user
+  password: '123456'
+  host: localhost
+  port: '5432'

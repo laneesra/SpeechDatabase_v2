@@ -1,0 +1,16 @@
+-e .
+
+mypy
+flake8
+pytest
+pytest-cov
+pytest-aiohttp
+numpy
+keras
+Pillow
+markdown2
+dataclasses
+tensorflow
+scipy
+pydub
+pandas

@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html lang="ru">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="description" content="">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Title -->
+    <title>Speech Recognition | Home</title>
+
+    <!-- Favicon -->
+    <link rel="icon" href="{{ url('static', filename='./images/core-img/favicon.ico') }}">
+
+    <!-- Stylesheet -->
+    <link rel="stylesheet" href="{{ url('static', filename='style.css') }}">
+
+</head>
+
+<body>
+<!-- /Preloader -->
+<!-- Header Area Start -->
+<header class="header-area">
+    <!-- Main Header Start -->
+    <div class="main-header-area">
+        <div class="classy-nav-container breakpoint-off">
+            <div class="container">
+                <!-- Classy Menu -->
+                <nav class="classy-navbar justify-content-between" id="razoNav">
+
+                    <!-- Logo -->
+                    <a class="nav-brand" href="/"><img src="{{ url('static', filename='images/core-img/logo.png') }}" alt=""></a>
+
+                    <!-- Navbar Toggler -->
+                    <div class="classy-navbar-toggler">
+                        <span class="navbarToggler"><span></span><span></span><span></span></span>
+                    </div>
+
+                    <!-- Menu -->
+                    <div class="classy-menu">
+                        <!-- Menu Close Button -->
+                        <div class="classycloseIcon">
+                            <div class="cross-wrap"><span class="top"></span><span class="bottom"></span></div>
+                        </div>
+
+                        <!-- Nav Start -->
+                        <div class="classynav">
+                            <ul id="nav">
+                                <li><a href="/">Home</a></li>
+                                <li><a href="speaker_recognition">Распознавание по голосу</a></li>
+                                <li><a href="transcription">Транскрибирование</a></li>
+                                <li><a href="adding">Добавить аудиозапись</a></li>
+
+                            </ul>
+
+                        </div>
+                        <!-- Nav End -->
+                    </div>
+                </nav>
+            </div>
+        </div>
+    </div>
+</header>
+<!-- Header Area End -->
+
+<!-- Latest Podcast Area Start -->
+<section class="razo-latest-podcast-area section-padding-80">
+    <div class="container">
+        <div class="row">
+            <div class="col-20">
+                <!-- Section Heading -->
+                <div class="section-heading">
+                    <h2>Транскрибирование</h2>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="container">
+        <div class="col-20" style="padding: 25px 50px 20px 70px;">
+            <h3>Тестирование</h3>
+            <div class="container">
+                <div class="event-btn-group" align="center" >
+                    <a href="test_transcription" class="btn razo-btn mt-2 mt-sm-0 btn-2 mx-2">Начать</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="container">
+        <div class="col-20" style="padding: 0px 50px 20px 70px;">
+            <h3>Поиск по ключевому слову</h3>
+            <br>
+            <select id="dataset1" style=" background-color: #FFFFFF; padding: 3px 80px 3px 3px">
+                <option value ="all">все</option>
+                <option value ="VoxCeleb">VoxCeleb</option>
+                <option value ="LibriSpeech">LibriSpeech</option>
+                </select><br>
+
+            <font size="4">Введите слово:</font>
+            <form>
+
+
+                <input type="text" id="search" name="KeyWord" value="hello">
+                <button type="button" onclick="searchWord()" style=" background-color: #4CAF50;
+                          border: none;
+                          color: white;
+                          padding: 5px 5px;
+                          text-align: center;
+                          text-decoration: none;
+                          display: inline-block;
+                          font-size: 12px;
+                          cursor: pointer;">GO</button>
+            </form>
+            <div id="data_wrapper_keyword" style="padding-top: 20px;"></div>
+
+        </div>
+
+    </div>
+
+    <p id="keywords" align="center"></p>
+
+    <div class="container">
+        <div class="col-20" style="padding: 0px 50px 20px 70px;">
+                <h3>Топ используемых слов</h3>
+            <br>
+                <select id="dataset" style=" background-color: #FFFFFF; padding: 3px 80px 3px 3px">
+                    <option value ="all">все</option>
+                    <option value ="VoxCeleb">VoxCeleb</option>
+                    <option value ="LibriSpeech">LibriSpeech</option>
+                </select><br>
+                <font size="4">Введите количество:</font>
+                <form id="top"  method="GET">
+                    <input type="text" id="topN" name="TopN" value="10">
+                    <button type="button" onclick="getTopWords()" style=" background-color: #4CAF50;
+                          border: none;
+                          color: white;
+                          padding: 5px 5px;
+                          text-align: center;
+                          text-decoration: none;
+                          display: inline-block;
+                          font-size: 12px;
+                          cursor: pointer;">GO</button>
+                </form>
+                <div id="data_wrapper_topN" style="padding-top: 20px;"></div>
+
+            </div>
+    </div>
+
+    <div class="container">
+        <div class="col-20" style="padding: 0px 50px 20px 70px;">
+            <h3>Разметить данные</h3>
+            <div class="event-btn-group" align="center" >
+                <a href="mark_data" class="btn razo-btn mt-2 mt-sm-0 btn-2 mx-2">Начать</a>
+            </div>
+        </div>
+    </div>
+
+</section>
+<script>
+
+function searchWord() {
+    var data = new FormData();
+    const $datWrapper = document.getElementById('data_wrapper_keyword');
+    var text = document.getElementById('search').value;
+    var dataset = document.getElementById('dataset1').value;
+    data.append("keyword", text);
+    data.append("dataset", dataset);
+    alert(data.dataset);
+    fetch('{{ url("keyword_search") }}', {
+        method: 'POST',
+        body: data,
+    }).then(
+        response =>
+            response.json()
+    ).then(
+        data =>
+            $datWrapper.innerHTML = responseToHtml_search(data)
+    )
+};
+
+function responseToHtml_search(data) {
+
+    let outStr = '';
+
+  for (let i = 1; i < data['response'].length + 1; i++) {
+    let item = data['response'][i - 1];
+    const id = item['id'];
+    const transcription = item['text'];
+
+    outStr += (
+      "<p>" + i + "." +
+      "<i> id:</i> " + id + "<br/>" +
+      "<i>transcription:</i> " + transcription + "</p>"
+    )
+  }
+
+  return outStr
+};
+
+function getTopWords() {
+    var data = new FormData();
+    const $datWrapper = document.getElementById('data_wrapper_topN');
+    var n = document.getElementById('topN').value;
+    data.append("n", n);
+
+    fetch('{{ url("get_top") }}', {
+        method: 'POST',
+        body: data,
+    }).then(
+        response =>
+            response.json()
+    ).then(
+        data =>
+            $datWrapper.innerHTML = responseToHtml_topN(data)
+    )
+};
+
+function responseToHtml_topN(data) {
+    let outStr = '';
+
+  for (let i = 1; i < data['response'].length + 1; i++) {
+    let item = data['response'][i - 1];
+    const word = item['keyword'];
+    const n = item['n_entry'];
+
+    outStr += (
+      "<p>" + i + "." +
+      "<i> keyword:</i> " + word + "<i> n: </i>" + n + "</p>"
+    )
+  }
+
+  return outStr
+};
+</script>
+<!-- All JS Files -->
+
+
+<!-- jQuery -->
+<script src="{{ url('static', filename='js/jquery.min.js') }}"></script>
+<!-- Popper -->
+<script src="{{ url('static', filename='js/popper.min.js') }}"></script>
+<!-- Bootstrap -->
+<script src="{{ url('static', filename='js/bootstrap.min.js') }}"></script>
+<!-- All Plugins -->
+<script src="{{ url('static', filename='js/razo.bundle.js') }}"></script>
+<!-- Active -->
+<script src="{{ url('static', filename='js/default-assets/active.js') }}"></script>
+
+</body>
+
+</html>

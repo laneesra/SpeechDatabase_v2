@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="ru">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="description" content="">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Title -->
+    <title>Speech Recognition | Home</title>
+
+    <!-- Favicon -->
+    <link rel="icon" href="{{ url('static', filename='./images/core-img/favicon.ico') }}">
+
+    <!-- Stylesheet -->
+    <link rel="stylesheet" href="{{ url('static', filename='style.css') }}">
+
+</head>
+
+<body>
+<!-- /Preloader -->
+<!-- Header Area Start -->
+<header class="header-area">
+    <!-- Main Header Start -->
+    <div class="main-header-area">
+        <div class="classy-nav-container breakpoint-off">
+            <div class="container">
+                <!-- Classy Menu -->
+                <nav class="classy-navbar justify-content-between" id="razoNav">
+
+                    <!-- Logo -->
+                    <a class="nav-brand" href="/"><img src="{{ url('static', filename='images/core-img/logo.png') }}" alt=""></a>
+
+                    <!-- Navbar Toggler -->
+                    <div class="classy-navbar-toggler">
+                        <span class="navbarToggler"><span></span><span></span><span></span></span>
+                    </div>
+
+                    <!-- Menu -->
+                    <div class="classy-menu">
+                        <!-- Menu Close Button -->
+                        <div class="classycloseIcon">
+                            <div class="cross-wrap"><span class="top"></span><span class="bottom"></span></div>
+                        </div>
+
+                        <!-- Nav Start -->
+                        <div class="classynav">
+                            <ul id="nav">
+                                <li><a href="/">Home</a></li>
+                                <li><a href="speaker_recognition">Распознавание по голосу</a></li>
+                                <li><a href="transcription">Транскрибирование</a></li>
+                                <li><a href="adding">Добавить аудиозапись</a></li>
+
+                            </ul>
+
+                        </div>
+                        <!-- Nav End -->
+                    </div>
+                </nav>
+            </div>
+        </div>
+    </div>
+</header>
+<!-- Header Area End -->
+
+<!-- Latest Podcast Area Start -->
+<section class="razo-latest-podcast-area section-padding-80">
+    <div class="container">
+        <div class="row">
+            <div class="col-20">
+                <!-- Section Heading -->
+                <div class="section-heading">
+                    <h2>Транскрибирование</h2>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="container">
+        <div class="col-20" style="padding: 25px 50px 60px 70px;">
+  <table bordercolor="white">
+      <tr>
+            <th width="40px" height="40px">
+            <button type="button" onclick="get_audio()" style=" background-color: white;
+                          border: none;
+                          color: white;
+                          padding: 5px 5px;
+                          text-align: center;
+                          text-decoration: none;
+                          display: inline-block;
+                          font-size: 12px;
+                          cursor: pointer;">
+                <img src="{{ url('static', filename='./images/bg-img/update.png') }}" />
+            </button>
+            </th>
+          <th>
+            <div id="audio_block" style="display: block;">
+                <audio controls="controls"
+                       src="/home/laneesra/PycharmProjects/speech_db/speech_app/imagetagger/imagetagger/static/audio/100-121674-0015.wav"></audio>
+                <div style="display: none;" id="hidden_id"></div>
+            </div>
+
+          </th>
+      </tr>
+  </table>
+
+            <font size="4">Введите слова, которые вы услышали:</font><br><br>
+            <form id="add_trans">
+                <input type="text" id="trans" size="115"><br><br>
+                    <button type="button" onclick="mark_data()" style=" background-color: #4CAF50;
+                      border: none;
+                      color: white;
+                      padding: 15px 20px;
+                      text-align: center;
+                      text-decoration: none;
+                      display: inline-block;
+                      font-size: 15px;
+                      cursor: pointer;
+                      align: center;">Подтвердить</button>
+            </form>
+            <div id="data_wrapper" style="padding-top: 20px;"></div>
+
+
+        </div>
+
+    </div>
+    <script language="javascript">
+    function get_audio() {
+        fetch('{{ url("get_audio_for_marking") }}', {
+            method: 'GET'
+        }).then(
+            response =>
+                response.json()
+        ).then(
+            data =>
+                upload(data)
+        )
+    };
+
+    function upload(data) {
+        const id = data['id'];
+        const audio = data['audio'];
+        document.getElementById("hidden_id").innerText = id;
+    }
+
+    function mark_data() {
+        var data = new FormData();
+        var text = document.getElementById('trans').value;
+        var id = document.getElementById("hidden_id").innerText;
+        data.append("trans", text);
+        data.append("id", id);
+
+        fetch('{{ url("add_transcript") }}', {
+            method: 'POST',
+            body: data,
+        }).then(
+            response =>
+                response.json()
+        ).then(
+            data => {
+                if (id == '') {
+                    alert('Запись не выбрана! Обновите');
+                } else {
+                    alert('Добавлена транскрипция к записи \nid:  ' + id);
+                }
+
+            }
+
+        )
+    };
+
+
+
+</script>
+
+</section>
+
+<!-- Music Charts Area End -->
+
+<!-- All JS Files -->
+
+
+<!-- jQuery -->
+<script src="{{ url('static', filename='js/jquery.min.js') }}"></script>
+<!-- Popper -->
+<script src="{{ url('static', filename='js/popper.min.js') }}"></script>
+<!-- Bootstrap -->
+<script src="{{ url('static', filename='js/bootstrap.min.js') }}"></script>
+<!-- All Plugins -->
+<script src="{{ url('static', filename='js/razo.bundle.js') }}"></script>
+<!-- Active -->
+<script src="{{ url('static', filename='js/default-assets/active.js') }}"></script>
+</body>
+
+</html>
