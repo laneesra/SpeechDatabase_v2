@@ -13,7 +13,7 @@ def init_db(conf):
 
 
 def open_conn():
-    conn = pg.connect(dbname='speech', user='postgres', password='080998', host='localhost')
+    conn = pg.connect(dbname='speech', user='postgres', password='123456', host='localhost')
     cursor = conn.cursor()
 
     return conn, cursor
